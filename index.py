@@ -4,7 +4,7 @@
 
 # Expected input: 
 # {
-#  [
+#   "words": [    
 #    "string1",
 #    "string2",
 #    "string3",
@@ -40,7 +40,7 @@
 # python index.py < input.json
 # where input.json is a json file with the input data.
 
- 
+
 
 import json
 import sys
@@ -48,25 +48,35 @@ import sys
 def order_strings_by_length(strings):
     # Create a dictionary to store the strings ordered by their length
     ordered_strings = {}
-    for string in strings:
-        length = len(string)
-        if length in ordered_strings:
-            ordered_strings[length].append(string)
-        else:
-            ordered_strings[length] = [string]
+    for word in strings["words"]:
+        # Get the length of the string
+        length = len(word)
+        # If the length is not in the dictionary, create a new list
+        if length not in ordered_strings:
+            ordered_strings[length] = []
+        # Add the string to the list
+        ordered_strings[length].append(word)
     return ordered_strings
+
+
+
+
 
 def main():
 
-    # Read input from stdin
-    input_data = sys.stdin.read()
-    input_json = json.loads(input_data)
+    # Read the json from 'input.json'
+    data = json.load(sys.stdin)
 
     # Order the strings by their length
-    ordered_strings = order_strings_by_length(input_json)
+    ordered_strings = order_strings_by_length(data)
 
-    # Print the ordered strings in json format
-    print(json.dumps(ordered_strings, indent=2))
+    # Create a 'output.json' file with the ordered strings
+    with open("output.json", "w") as output_file:
+        json.dump(ordered_strings, output_file)
+
+    print("The strings have been ordered by their length in 'output.json'")
+ 
+
 
 if __name__ == "__main__":
     main()
