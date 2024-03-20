@@ -46,38 +46,30 @@ import json
 import sys
 
 def order_strings_by_length(strings):
-    # Create a dictionary to store the strings ordered by their length
     ordered_strings = {}
     for word in strings["words"]:
-        # Get the length of the string
         length = len(word)
-        # If the length is not in the dictionary, create a new list
         if length not in ordered_strings:
             ordered_strings[length] = []
-        # Add the string to the list
         ordered_strings[length].append(word)
     return ordered_strings
 
-
-
-
-
 def main():
-
-    # Read the json from 'input.json'
-    data = json.load(sys.stdin)
+    # Attempt to read JSON data from standard input
+    try:
+        data = json.load(sys.stdin)
+    except json.JSONDecodeError:
+        print("Error: Invalid JSON input.")
+        return
 
     # Order the strings by their length
     ordered_strings = order_strings_by_length(data)
 
-    # Create a 'output.json' file with the ordered strings
+    # Write the ordered strings to 'output.json'
     with open("output.json", "w") as output_file:
         json.dump(ordered_strings, output_file)
 
     print("The strings have been ordered by their length in 'output.json'")
- 
-
 
 if __name__ == "__main__":
     main()
-
